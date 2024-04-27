@@ -51,7 +51,7 @@
                         <p>台灣合法飲酒年齡為18歲</p>
                         <p>請確認您是否已年滿18歲</p>
                         <div class="warn_btn">            
-                            <button id="yes">是</button>
+                            <button id="yes"  @click="warn">是</button>
                         </div>
                     </div>
                 </div>
@@ -64,20 +64,6 @@
                     <p>幻化成為啤酒的動人靈魂</p>
                     <p>在經過數個夜的精心釀製</p>
                     <p>成就非凡的水月啤酒</p>
-                </div>
-            </div>
-            <div class="warn_bg">
-                <div class="warn">
-                    <div class="warn_content">
-                        <p>本網站只做為個人作品集使用</p>
-                        <p>圖片及產品來自啤酒頭官網</p>
-                        <p>台灣合法飲酒年齡為18歲</p>
-                        <p>請確認您是否已年滿18歲</p>
-                        <div class="warn_btn">            
-                            <button id="yes" @click="warn">是</button>
-                        </div>
-            
-                    </div>
                 </div>
             </div>
             <!-- News -->
@@ -156,8 +142,8 @@
                 </div>
             </div>
 
-            <!-- Classic -->
-            <div class="page" id="classic">
+            <!-- Moon -->
+            <div class="page" id="moon">
                 <img src="images/moon/滿月_亮.png" alt="" class="bg_moon">
                 <div class="container">
                     <div class="page_title">
@@ -229,41 +215,43 @@
                         </div>
                     </div>
                 </div>
-                <div class="product_card">
-                    <div class="product_card_top">
-                        <h2>年度系列</h2>
-                        <div class="card_top_right">
-                            <div class="line"></div>
-                            <h2>No.1</h2>
+
+                <div>
+                    <div class="carousel_btn prev" @click='changeClassicIndex(-1)'>
+                        <img src="images/prev.png" alt="">
+                    </div>
+                    <div class="product_card">
+                        <div class="product_card_top">
+                            <h2>{{classic[classicIndex].type}}</h2>
+                            <div class="card_top_right">
+                                <div class="line"></div>
+                                <h2>{{classic[classicIndex].num}}</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="card_content_left">
+                                <h2>{{classic[classicIndex].name}}</h2>
+                                <p class="flavor">口味:{{classic[classicIndex].flavor}}</p>
+                                <p>酒精濃度:{{classic[classicIndex].abv}}</p>
+                                <p>原料: <br />
+                                    {{classic[classicIndex].material}}
+                                </p>
+                                <p id="product_price">NT:{{classic[classicIndex].price}}</p>
+                            </div>
+                            <div class="product_img">
+                                <img :src='classic[classicIndex].img' alt="">
+                            </div>
+                            <div class="card_content_right">
+                                <p>{{classic[classicIndex].info}}</p>
+                            </div>
+                            <div class="card_content_intro">
+                                <h3>產品介紹</h3>
+                                <p>{{classic[classicIndex].info}}</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="card_content_left">
-                            <h2>為歡</h2>
-                            <p class="flavor">口味: 微甜、鹹</p>
-                            <p>酒精濃度: 11%</p>
-                            <p>原料: <br />
-                                水、大麥芽、小麥芽、燕麥、鹹楊桃汁、糖、啤酒花、酵母</p>
-                            <p id="product_price">NT:790</p>
-                        </div>
-                        <div class="product_img">
-                            <img src="images/products/為歡.png" alt="">
-                        </div>
-                        <div class="card_content_right">
-                            <p>使用野生菌種搭配比利時 Saison 酵母，
-                                釀造迷人果酸與香料味主導的酸啤酒，
-                                搭配臺灣經典鹹楊桃汁、加入適度燕麥創造滑順酒體，
-                                再進橡木桶一同發酵，鹹香酸元素調和得無比融洽。
-                            </p>
-                        </div>
-                        <div class="card_content_intro">
-                            <h3>產品介紹</h3>
-                            <p>使用野生菌種搭配比利時 Saison 酵母，
-                                釀造迷人果酸與香料味主導的酸啤酒，
-                                搭配臺灣經典鹹楊桃汁、加入適度燕麥創造滑順酒體，
-                                再進橡木桶一同發酵，鹹香酸元素調和得無比融洽。
-                            </p>
-                        </div>
+                    <div class="carousel_btn next" @click='changeClassicIndex(1)'>
+                        <img src="images/next.png" alt="">
                     </div>
                 </div>
             </div>
@@ -334,52 +322,72 @@
 <script src="vendor/OwlCarousel2-2.3.4/owl.carousel.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.js'></script>
 <script>
-    $(document).ready(function (){
-        let vm= new Vue({
-            el:"#app",
-            data:{
-                news:[]
+    let vm= new Vue({
+        el:"#app",
+        data:{
+            news:[],
+            classic:[],
+            classicIndex:0
+        },
+
+        //----------------------------
+        mounted() {
+            $(window).scroll(this.handleScroll);
+            axios.get('http://localhost:8888/news')
+            .then((result)=>{
+                this.news = result.data;                   
+            }).catch((error)=>{
+                console.log(error)
+            })
+            axios.get('http://localhost:8888/classicProduct')
+            .then((result)=>{
+                this.classic = result.data;                   
+            }).catch((error)=>{
+                console.log(error)
+            })
+        },
+
+        //----------------------------
+        updated() {
+            this.initOwlCarousel();
+        },
+
+        //----------------------------
+        methods:{
+            handleScroll() {
+                let scrolledPx = $(window).scrollTop();
+                if (scrolledPx > 200) {
+                    $('.navbar').addClass('show_nav');
+                } else {
+                    $('.navbar').removeClass('show_nav');
+                }
             },
-            mounted() {
-                $(window).scroll(this.handleScroll);
-                axios.get('http://localhost:8888/news')
-                .then((result)=>{
-                    this.news = result.data;                   
-                }).catch((error)=>{
-                    console.log(error)
-                })
+            initOwlCarousel() {
+                $('#news .owl-carousel').owlCarousel({
+                    loop: true,
+                    autoWidth: true,
+                    items: 1,
+                    margin: 10,
+                    autoplay: true,
+                    autoplayTimeout: 3000,
+                    autoplayHoverPause: true,
+                });
             },
-            updated() {
-                this.initOwlCarousel();
+            warn() {
+                $('.warn_bg').hide();
+                $('.warn').hide();
             },
-            methods:{
-                handleScroll() {
-                    let scrolledPx = $(window).scrollTop();
-                    if (scrolledPx > 200) {
-                        $('.navbar').addClass('show_nav');
-                    } else {
-                        $('.navbar').removeClass('show_nav');
-                    }
-                },
-                initOwlCarousel() {
-                    $('#news .owl-carousel').owlCarousel({
-                        loop: true,
-                        autoWidth: true,
-                        items: 1,
-                        margin: 10,
-                        autoplay: true,
-                        autoplayTimeout: 3000,
-                        autoplayHoverPause: true,
-                    });
-                },
-                warn() {
-                    $('.warn_bg').hide();
-                    $('.warn').hide();
+            changeClassicIndex(change) {
+                this.classicIndex += change;
+                if(this.classicIndex< 0){
+                    this.classicIndex = this.classic.length -1;
+                }else if(this.classicIndex > this.classic.length -1){
+                    this.classicIndex = 0;
                 }
             }
+        }
     
-        })
-    });
+    })
 
 
 </script>

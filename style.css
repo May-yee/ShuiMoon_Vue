@@ -521,20 +521,20 @@ a {
 }
 
 /* --------- *\
-	Classic
+	moon
 \* --------- */
-#classic {
+#moon {
 	background: linear-gradient(254deg, rgba(255, 202, 16, 0.20) 35.32%, rgba(255, 255, 255, 0.07) 70.47%), #213555;
 	overflow: hidden;
 	padding-bottom: 80px;
 }
 
-#classic .title_box {
+#moon .title_box {
 	background: linear-gradient(270deg, #4D5347 10.78%, #424E58 84.05%);
 	color: #F0F0F0;
 }
 
-#classic .page_title hr {
+#moon .page_title hr {
 	border-color: #F0F0F0;
 }
 
@@ -594,7 +594,7 @@ a {
 	font-size: 12px;
 }
 @media screen and (max-width: 1024px){
-	#classic .row{
+	#moon .row{
 		flex-wrap: wrap;
 	}
 	.product_picture img{
@@ -648,7 +648,7 @@ a {
 		line-height: 24px;
 	}
 }
-/* Classic Moon_btn */
+/* moon Moon_btn */
 .btn_group {
 	padding-top: 80px;
 	width: 380px;
@@ -752,6 +752,25 @@ a {
 /* --------- *\
 	Product
 \* --------- */
+#product .carousel_btn{
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	cursor: pointer;
+	width: 80px;
+	height: 80px;
+}
+#product .carousel_btn img{
+	width: 100%;
+}
+#product .prev{
+	left: 120px;
+}
+#product .next{
+	right:120px;
+}
+
+
 #product,
 #product .title_box {
 	background-color: #F0F0F0;
