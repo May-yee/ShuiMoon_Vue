@@ -40,11 +40,34 @@
                         <li>尋找水月</li>
                     </a>
                 </ul>
-                <div class="hamburger">
+                <div class="hamburger" @click="hamburger">
                     <div></div>
                     <div></div>
                     <div></div>
                 </div>
+            </div>
+            <div class="hamburger_list">
+                <div class="cancel" @click="cancel">
+                    <span></span>
+                    <span></span>
+                </div>
+                <ul @click="cancel">
+                    <a href="#news">
+                        <li>最新消息</li>
+                    </a>
+                    <a href="#material">
+                        <li>釀造來源</li>
+                    </a>
+                    <a href="#moon">
+                        <li>經典水月</li>
+                    </a>
+                    <a href="#product">
+                        <li>產品介紹</li>
+                    </a>
+                    <a href="#shop">
+                        <li>尋找水月</li>
+                    </a>
+                </ul>
             </div>
             <div class="warn_bg">
                 <div class="warn">
@@ -53,7 +76,7 @@
                         <p>圖片及產品來自啤酒頭官網</p>
                         <p>台灣合法飲酒年齡為18歲</p>
                         <p>請確認您是否已年滿18歲</p>
-                        <div class="warn_btn">            
+                        <div class="warn_btn">      
                             <button id="yes"  @click="warn">是</button>
                         </div>
                     </div>
@@ -195,10 +218,10 @@
                                 </div>
                                 <p>NT:{{moonProduct[moonIndex].price}}</p>
                             </div>
-                            <div id="classic_btn">查看圖片
+                            <div id="classic_btn" @click="moonImgShow">查看圖片
                             </div>
                         </div>
-                        <div class="product_picture">
+                        <div class="product_picture" @click="moonImgHide">
                             <img :src="moonProduct[moonIndex].img" alt="">
                         </div>
                     </div>
@@ -218,7 +241,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="row carousel">
                     <div class="carousel_btn prev" @click='changeClassicIndex(-1)'>
                         <img src="images/prev.png" alt="">
                     </div>
@@ -246,7 +269,7 @@
                             <div class="card_content_right">
                                 <p>{{classic[classicIndex].info}}</p>
                             </div>
-                            <div class="card_content_intro">
+                            <div class="card_content_intro" @click="cardIntro">
                                 <h3>產品介紹</h3>
                                 <p>{{classic[classicIndex].info}}</p>
                             </div>
@@ -405,11 +428,26 @@
             },
             changeStoreIndex(change) {
                 this.storeIndex = change;
+            },
+            cancel(){
+                $('.hamburger_list').fadeOut();
+            },
+            hamburger(){
+                $('.hamburger_list').fadeIn();
+            },
+            cardIntro(){
+                $('.card_content_intro').toggleClass('show');
+            },
+            moonImgShow(){
+                $('.product_picture').css("display","block");
+            },
+            moonImgHide(){
+                $('.product_picture').css("display","none");
             }
         }
     
     })
-
+    
 
 </script>
 </html>
