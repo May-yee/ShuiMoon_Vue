@@ -14,7 +14,10 @@
 </head>
 <body>
     <div id="app">
-        <section>
+        <section class="loading" v-if="loading">
+            載入中....
+        </section>
+        <section v-else>
             <!-- Navbar -->
             <div class="navbar">
                 <div class="logo">
@@ -27,7 +30,7 @@
                     <a href="#material">
                         <li>釀造來源</li>
                     </a>
-                    <a href="#classic">
+                    <a href="#moon">
                         <li>經典水月</li>
                     </a>
                     <a href="#product">
@@ -155,49 +158,48 @@
                     </div>
                     <div class="row">
                         <div class="btn_group">
-                            <div class="moon_btn active" id="moon_btn1">
+                            <div class="moon_btn active" id="moon_btn1" @click="changeMoonIndex(0)">
                                 <div class="moon_pic moon_pic1 active"></div>
                                 <p>眉月</p>
                             </div>
-                            <div class="moon_btn " id="moon_btn2">
+                            <div class="moon_btn " id="moon_btn2" @click="changeMoonIndex(1)">
                                 <div class="moon_pic moon_pic2"></div>
                                 <p>上弦月</p>
                             </div>
-                            <div class="moon_btn" id="moon_btn3">
+                            <div class="moon_btn" id="moon_btn3" @click="changeMoonIndex(2)">
                                 <div class="moon_pic moon_pic3"></div>
                                 <p>盈凸月</p>
                             </div>
-                            <div class="moon_btn" id="moon_btn4">
+                            <div class="moon_btn" id="moon_btn4" @click="changeMoonIndex(3)">
                                 <div class="moon_pic moon_pic4"></div>
                                 <p>滿月</p>
                             </div>
-                            <div class="moon_btn" id="moon_btn5">
+                            <div class="moon_btn" id="moon_btn5" @click="changeMoonIndex(4)">
                                 <div class="moon_pic moon_pic5"></div>
                                 <p>殘月</p>
                             </div>
                         </div>
-                        <div class="classic_container">
+                        <div class="classic_container" v-if="moonProduct">
                             <div class="product_title">
-                                <p id="product_name">眉月</p>
-                                <p class="flavor" id="classic_flavor">
-                                    口味: 苦、辛辣、帶有橘子香
+                                <p id="product_name">{{moonProduct[moonIndex].name}}</p>
+                                <p class="flavor">
+                                    口味:{{moonProduct[moonIndex].flavor}}
                                 </p>
                             </div>
                             <div class="product_content">
-                                <p>酒精濃度:<span id="abv"> 11%</span></span></p>
+                                <p>酒精濃度:{{moonProduct[moonIndex].abv}}</p>
                                 <p>原料:</p>
-                                <p>水、大麥芽、啤酒花、酵母、<span id="classic_material">台灣橘子</span> </p>
+                                <p>{{moonProduct[moonIndex].material}}</p>
                                 <div class="product_content_card" id="product_content_card">
-                                    <p>
-                                        「眉月」啤酒有兩位主角：梅子與麥芽。使用春天產的台灣青梅製酒，並以香檳酵母發酵麥汁，兩者角色各半混釀而成，有著豐盈果香與梅子清甜。
-                                    </p>
+                                    <p>{{moonProduct[moonIndex].info}}</p>
                                 </div>
+                                <p>NT:{{moonProduct[moonIndex].price}}</p>
                             </div>
                             <div id="classic_btn">查看圖片
                             </div>
                         </div>
                         <div class="product_picture">
-                            <img src="images/products/眉月.png" alt="">
+                            <img :src="moonProduct[moonIndex].img" alt="">
                         </div>
                     </div>
 
@@ -268,25 +270,25 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-6 shop_map">
-                            <div class="shop_link" id="shop_taipei">
+                            <div class="shop_link" id="shop_taipei" @click="changeStoreIndex(0)">
                                 <p>台北微風店</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="none">
                                     <path d="M10 17L0.473722 0.499998L19.5263 0.5L10 17Z" fill="#E5D283" />
                                 </svg>
                             </div>
-                            <div class="shop_link" id="shop_taichung">
+                            <div class="shop_link" id="shop_taichung" @click="changeStoreIndex(1)">
                                 <p>台中新光店</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="none">
                                     <path d="M10 17L0.473722 0.499998L19.5263 0.5L10 17Z" fill="#E5D283" />
                                 </svg>
                             </div>
-                            <div class="shop_link" id="shop_sunmoon">
+                            <div class="shop_link" id="shop_sunmoon" @click="changeStoreIndex(2)">
                                 <p>日月潭總店</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="none">
                                     <path d="M10 17L0.473722 0.499998L19.5263 0.5L10 17Z" fill="#E5D283" />
                                 </svg>
                             </div>
-                            <div class="shop_link" id="shop_kaohsiung">
+                            <div class="shop_link" id="shop_kaohsiung" @click="changeStoreIndex(3)">
                                 <p>高雄巨蛋店</p>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17" fill="none">
                                     <path d="M10 17L0.473722 0.499998L19.5263 0.5L10 17Z" fill="#E5D283" />
@@ -294,12 +296,12 @@
                             </div>
                         </div>
                         <div class="col-lg-6 shop_content">
-                            <h2 id="shop_name">台北微風店</h2>
-                            <p id="shop_add">地址:台北市信義區忠孝東路五段68號</p>
-                            <p id="shop_phone">電話:02-66995555</p>
+                            <h2 id="shop_name">{{store[storeIndex].name}}</h2>
+                            <p id="shop_add">地址:{{store[storeIndex].address}}</p>
+                            <p id="shop_phone">電話:{{store[storeIndex].phone}}</p>
                             <div class="google_map">
                                 <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.8091746898776!2d121.56421597483232!3d25.040549238028827!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab2720899e17%3A0xb8d38a134d34b94c!2z5b6u6aKo5L-h576p!5e0!3m2!1szh-TW!2stw!4v1703560966494!5m2!1szh-TW!2stw"
+                                    :src="store[storeIndex].mapLink"
                                     width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
                                     referrerpolicy="no-referrer-when-downgrade">
                                 </iframe>
@@ -318,33 +320,42 @@
     </div>
 </body>
 <script src="vendor/jquery/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src="vendor/OwlCarousel2-2.3.4/owl.carousel.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.js'></script>
 <script>
     let vm= new Vue({
         el:"#app",
         data:{
+            loading:true,
             news:[],
             classic:[],
-            classicIndex:0
+            classicIndex:0,
+            moonProduct:[],
+            moonIndex:0,
+            store:[],
+            storeIndex:0,
+            class:'',
         },
 
         //----------------------------
         mounted() {
             $(window).scroll(this.handleScroll);
-            axios.get('http://localhost:8888/news')
-            .then((result)=>{
-                this.news = result.data;                   
-            }).catch((error)=>{
-                console.log(error)
-            })
-            axios.get('http://localhost:8888/classicProduct')
-            .then((result)=>{
-                this.classic = result.data;                   
-            }).catch((error)=>{
-                console.log(error)
-            })
+
+            Promise.all([
+            axios.get('http://localhost:8888/news'),
+            axios.get('http://localhost:8888/classicProduct'),
+            axios.get('http://localhost:8888/moonProduct'),
+            axios.get('http://localhost:8888/store')
+            ]).then(([newsRes, classicRes, moonProductRes, storeRes]) => {
+                this.news = newsRes.data;
+                this.classic = classicRes.data;
+                this.moonProduct = moonProductRes.data;
+                this.store = storeRes.data;
+                this.loading = false; 
+            }).catch((error) => {
+                console.log(error);
+            });
         },
 
         //----------------------------
@@ -384,6 +395,16 @@
                 }else if(this.classicIndex > this.classic.length -1){
                     this.classicIndex = 0;
                 }
+            },
+            changeMoonIndex(change) {
+                this.moonIndex = change;
+                this.class = '.moon_pic'+(change+1);
+                // console.log(this.class);
+                $('.moon_pic').removeClass('active');
+                $(this.class).addClass('active');
+            },
+            changeStoreIndex(change) {
+                this.storeIndex = change;
             }
         }
     
